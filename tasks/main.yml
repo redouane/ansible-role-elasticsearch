@@ -1,0 +1,22 @@
+---
+
+- name: Download ElasticSearch
+  get_url:
+    url={{ elasticsearch_download_url }}/elasticsearch-{{ elasticsearch_version }}.deb
+    dest=/tmp/elasticsearch-{{ elasticsearch_version }}.deb
+    mode=0440
+
+- name: Install ElasticSearch Debian Package
+  apt:
+    deb=/tmp/elasticsearch-{{ elasticsearch_version }}.deb
+
+- name: configure elasticsearch
+  template:
+    src=elasticsearch.yml.j2
+    dest=/etc/elasticsearch/elasticsearch.yml
+
+  notify:
+    - restart elasticsearch
+
+- name: enable and start elasticsearch service
+  service: name=elasticsearch enabled=true state=started
