@@ -1,6 +1,8 @@
 Ansible Role: ElasticSearch
 ===========================
 
+[![Build Status](https://travis-ci.org/redouane/ansible-role-elasticsearch.svg?branch=master)](https://travis-ci.org/redouane/ansible-role-elasticsearch)
+
 Downloads, Installs and configures ElasticSearch
 
 Requirements
