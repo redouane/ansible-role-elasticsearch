@@ -13,18 +13,19 @@ Role Variables
 
 ```yaml
 
-elasticsearch_discovery_zen_ping_unicast_hosts: []
+elasticsearch_version: 2.0.0
+elasticsearch_download_url: https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch
 
-elasticsearch_version: 1.7.1
-elasticsearch_user: elasticsearch
-elasticsearch_group: elasticsearch
-elasticsearch_download_url: https://download.elastic.co/elasticsearch/elasticsearch
-
+elasticsearch_heap_size: 1g
+elasticsearch_node_master: true
+elasticsearch_node_data: true
+elasticsearch_cluster_name: elasticsearch
 elasticsearch_http_port: 9200
-elasticsearch_node2node_port: 9300
-
-elasticsearch_node_master: 'true'
-elasticsearch_node_data: 'true'
+elasticsearch_transport_tcp_port: 9300
+elasticsearch_network_host: _local_
+elasticsearch_discovery_zen_ping_unicast_hosts:
+- "127.0.0.1"
+- "[::1]"
 
 ```
 

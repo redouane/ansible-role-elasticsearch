@@ -1,22 +1,36 @@
 ---
 
-- name: Download ElasticSearch
+- name: elasticsearch install check
+  command: dpkg-query -l elasticsearch
+  register: elasticsearch_install_check
+  failed_when: elasticsearch_install_check.rc > 1
+  changed_when: elasticsearch_install_check.rc == 1
+
+- name: download elasticsearch
   get_url:
-    url={{ elasticsearch_download_url }}/elasticsearch-{{ elasticsearch_version }}.deb
+    url={{ elasticsearch_download_url }}/{{ elasticsearch_version }}/elasticsearch-{{ elasticsearch_version }}.deb
     dest=/tmp/elasticsearch-{{ elasticsearch_version }}.deb
     mode=0440
+  when: elasticsearch_install_check.changed
 
-- name: Install ElasticSearch Debian Package
+- name: install elasticSearch package
   apt:
     deb=/tmp/elasticsearch-{{ elasticsearch_version }}.deb
+  when: elasticsearch_install_check.changed
+
+- name: configure elasticsearch env and init defaults
+  template:
+    src=defaults.conf.j2
+    dest=/etc/default/elasticsearch
+  notify:
+  - restart elasticsearch
 
 - name: configure elasticsearch
   template:
     src=elasticsearch.yml.j2
     dest=/etc/elasticsearch/elasticsearch.yml
-
   notify:
-    - restart elasticsearch
+  - restart elasticsearch
 
-- name: enable and start elasticsearch service
-  service: name=elasticsearch enabled=true state=started
+- name: enable elasticsearch service
+  service: name=elasticsearch enabled=true
